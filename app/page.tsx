@@ -3,9 +3,37 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
 
+import  pool  from '../config/database';
+
+
+
+
 import styles from '@/app/ui/home.module.css';
 
+
 export default function Page() {
+
+  async function getAllCats() {
+      try {
+        const { rows } = await pool.query(`SELECT * FROM cats`);
+        return rows;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+
+ 
+      async function fetchCats() {
+        const catsData = await getAllCats();
+        console.log(catsData);
+        
+      }
+  
+      fetchCats();
+ 
+
+
   return (
     <main className="flex min-h-screen flex-col p-6">
       <div className="flex h-20 shrink-0 items-end rounded-lg bg-blue-500 p-4 md:h-52">
