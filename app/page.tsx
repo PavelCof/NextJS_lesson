@@ -9,28 +9,13 @@ import  pool  from '../config/database';
 
 
 import styles from '@/app/ui/home.module.css';
+import { getAllCats } from '@/config/getCats';
 
 
 export default function Page() {
 
-  async function getAllCats() {
-      try {
-        const { rows } = await pool.query(`SELECT * FROM cats`);
-        return rows;
-      } catch (err) {
-        console.error(err);
-      }
-    }
 
-
- 
-      async function fetchCats() {
-        const catsData = await getAllCats();
-        console.log(catsData);
-        
-      }
-  
-      fetchCats();
+  getAllCats();
  
 
 

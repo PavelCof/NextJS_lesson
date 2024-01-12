@@ -27,9 +27,16 @@ export type Invoice = {
 };
 
 export type Revenue = {
-  month: string;
-  revenue: number;
+  name: string;
+  type: number;
 };
+
+export interface Cat {
+  id: number;
+  name: string;
+  type: number;
+  comment:null
+}
 
 export type LatestInvoice = {
   id: string;
