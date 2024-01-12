@@ -12,9 +12,9 @@ export async function getAllCats(): Promise<Cat[]> {
     }
 }
 
-export async function fetchCats(): Promise<Cat[]> {
+export async function fetchCats() {
     try {
-        const catsData = await getAllCats();
+        const catsData: Cat[] = await getAllCats();
         return catsData;
     } catch (err) {
         console.error(err);
@@ -22,16 +22,6 @@ export async function fetchCats(): Promise<Cat[]> {
     }
 }
 
-export async function exampleUsage() {
-    try {
-        const cats: Cat[] = await fetchCats();
-        console.log(cats);
-        return cats; // Добавляем возврат для правильной обработки промиса
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-}
 
 
 
