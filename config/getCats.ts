@@ -12,15 +12,15 @@ export async function getAllCats(): Promise<Cat[]> {
     }
 }
 
-export async function fetchCats() {
-    try {
-        const catsData: Cat[] = await getAllCats();
-        return catsData;
-    } catch (err) {
-        console.error(err);
-        throw err;
-    }
-}
+// export async function fetchCats() {
+//     try {
+//         const catsData: Cat[] = await getAllCats();
+//         return catsData;
+//     } catch (err) {
+//         console.error(err);
+//         throw err;
+//     }
+// }
 
 
 
