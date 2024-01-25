@@ -28,7 +28,6 @@ export default async function InvoicesTable({
                 <div className="flex items-center justify-between border-b pb-4">
                   <div>
                     <div className="mb-2 flex items-center">
-                      
                       <Image
                         src={"/customers/"+invoice.name+".png"}
                         className="mr-2 rounded-full"
