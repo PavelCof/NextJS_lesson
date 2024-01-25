@@ -7,10 +7,11 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
+import { createInvoice } from '@/app/lib/actions'
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
   return (
-    <form>
+    <form action={createInvoice}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -65,7 +66,15 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
             <div className="flex gap-4">
               <div className="flex items-center">
-                <input
+              <input
+                id="amount"
+                name="status"
+                type="text"
+                step="0.01"
+                placeholder="Enter USD amount"
+                className="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
+              />
+                {/* <input
                   id="pending"
                   name="status"
                   type="radio"
@@ -92,7 +101,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                   className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
                 >
                   Paid <CheckIcon className="h-4 w-4" />
-                </label>
+                </label> */}
               </div>
             </div>
           </div>

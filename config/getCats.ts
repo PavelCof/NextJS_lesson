@@ -149,3 +149,49 @@ export async function fetchInvoicesPages(query: string) {
     throw new Error('Failed to fetch total number of invoices.');
   }
 }
+
+export async function fetchCustomers() {
+  try {
+    const data = await pool.query(`
+      SELECT
+        id,
+        name,customer_id
+      FROM cats
+      ORDER BY name ASC
+    `);
+
+    const customers = data.rows;
+
+    console.log(customers);
+    
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+
+  }
+}
+
+export async function fetchInvoiceById(id: string) {
+  try {
+    const data = await await pool.query(`
+      SELECT
+        id,
+        customer_id,
+        amount,
+        status
+      FROM cats
+      WHERE id = ${id};
+    `);
+
+    const invoice = data.rows.map((invoice) => ({
+      ...invoice,
+      // Convert amount from cents to dollars
+      amount: invoice.amount / 100,
+    }));
+
+    return invoice[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+  
+  }
+}
