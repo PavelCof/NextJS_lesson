@@ -2,11 +2,18 @@ import { Cat } from "@/app/lib/definitions";
 import pool from "./database";
 import { QueryResult } from "pg";
 import { formatCurrency } from "@/app/lib/utils";
+import { unstable_noStore as noStore } from 'next/cache';
+import CardWrapper from '@/app/ui/dashboard/cards';
 
 export async function getAllCats(): Promise<Cat[]> {
+  noStore();
     try {
-   
+ 
+      // await new Promise((resolve) => setTimeout(resolve, 3000));
+
         const result: QueryResult<Cat> = await pool.query('SELECT * FROM cats');
+        
+    
         return result.rows;
     } catch (err) {
         console.error(err);
@@ -14,15 +21,21 @@ export async function getAllCats(): Promise<Cat[]> {
     }
 }
 export async function fetchCardData() {
+    noStore();
     try {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       // You can probably combine these into a single SQL query
       // However, we are intentionally splitting them to demonstrate
       // how to initialize multiple queries in parallel with JS.
+      
       const invoiceCountPromise = await pool.query(`SELECT COUNT(*) FROM cats`);
       const customerCountPromise = await pool.query(`SELECT COUNT(*) FROM cats`);
       const invoiceStatusPromise = await pool.query(`SELECT COUNT(*) FROM cats`);
+
         //    SUM(CASE WHEN status = 'paid' THEN amount ELSE 0 END) AS "paid",
         //    SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
+
       const data = await Promise.all([
         invoiceCountPromise,
         customerCountPromise,
@@ -47,6 +60,7 @@ export async function fetchCardData() {
   }
 
   export async function fetchLatestInvoices() {
+    noStore();
     try {
       const data = await pool.query(`
         SELECT * FROM cats  LIMIT 5`);
@@ -77,3 +91,39 @@ export async function fetchCardData() {
 
 
 
+const ITEMS_PER_PAGE = 6;
+export async function fetchFilteredInvoices(
+  query: string,
+  currentPage: number,
+) {
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    // const invoices = await sql<InvoicesTable>`
+    //   SELECT
+    //     invoices.id,
+    //     invoices.amount,
+    //     invoices.date,
+    //     invoices.status,
+    //     customers.name,
+    //     customers.email,
+    //     customers.image_url
+    //   FROM invoices
+    //   JOIN customers ON invoices.customer_id = customers.id
+    //   WHERE
+    //     customers.name ILIKE ${`%${query}%`} OR
+    //     customers.email ILIKE ${`%${query}%`} OR
+    //     invoices.amount::text ILIKE ${`%${query}%`} OR
+    //     invoices.date::text ILIKE ${`%${query}%`} OR
+    //     invoices.status ILIKE ${`%${query}%`}
+    //   ORDER BY invoices.date DESC
+    //   LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    // `;
+    const invoices = await pool.query('SELECT * FROM cats WHERE name ILIKE $1 LIMIT 5', [`%${query}%`]);
+    console.log(invoices);
+    return invoices.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    // throw new Error('Failed to fetch invoices.');
+  }
+}
