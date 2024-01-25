@@ -9,7 +9,7 @@ const FormSchema = z.object({
   id: z.string(),
   customerId: z.string(),
   amount: z.coerce.number(),
-  status: z.string(),//z.enum(['pending', 'paid']),
+  status: z.enum(['pending', 'paid']), //z.string(),
   date: z.string(),
 });
  
@@ -27,9 +27,9 @@ export async function createInvoice(formData: FormData) {
     // console.log(rawFormData);
 
     await pool.query(`
-        INSERT INTO cats (id,customer_id, amount, status, date)
-        VALUES (DEFAULT,${customerId}, ${amountInCents}, ${status}, ${date})
-    `)
+    INSERT INTO cats (id, customer_id, amount, status, date)
+    VALUES (DEFAULT, $1, $2, $3, $4)
+`, [customerId, amountInCents, status, date]);
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
   }
@@ -43,11 +43,11 @@ export async function createInvoice(formData: FormData) {
    
     const amountInCents = amount * 100;
    
-    await  pool.query(`
-      UPDATE cats
-      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-      WHERE id = ${id}
-    `);
+    await pool.query(`
+    UPDATE cats
+    SET customer_id = $1, amount = $2, status = $3
+    WHERE id = $4
+  `, [customerId, amountInCents, status, id]);
    
     revalidatePath('/dashboard/invoices');
     redirect('/dashboard/invoices');
